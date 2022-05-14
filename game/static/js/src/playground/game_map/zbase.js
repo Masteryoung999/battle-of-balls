@@ -16,7 +16,7 @@ class GameMap extends AcGameObject {
         this.render();
     }
     render() {
-        this.ctx.fillStyle = "rgba(0, 0, 0)";
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; //0.2的透明度
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 }
