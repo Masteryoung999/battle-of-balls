@@ -3,7 +3,7 @@ from game.models.player.player import Player # 引入game/models/player/player.p
 
 
 def getinfo_acapp(request):  # 处理acapp端的请求(每个处理请求的函数都需要request参数)
-    player = Player.objects.all()[0] # 为了方便调试, 取出第一名玩家的信息
+    player = Player.objects.all()[0]
     return JsonResponse({ # JsonResponse返回一个字典
         'result': "success",
         'username': player.user.username,
@@ -18,7 +18,7 @@ def getinfo_web(request):  # 处理web端的请求
             'result': "未登录"
         })
     else:
-        player = Player.objects.all()[0]
+        player = Player.objects.get(user=user)
         return JsonResponse({
             'result': "success",
             'username': player.user.username ,
