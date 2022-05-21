@@ -20,7 +20,8 @@ class Particle extends AcGameObject {  //  所有要动的物体都是AcGameObje
     }
 
     update() {
-        if(this.move_length < this.eps || this.speed < this.eps) {
+        this.radius -= 1/ 1000;
+        if(this.radius < 1) {
             this.destroy();
             return false;
         }
@@ -36,5 +37,16 @@ class Particle extends AcGameObject {  //  所有要动的物体都是AcGameObje
         this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
+    }
+
+    on_destroy() {
+        this.radius = 0;
+        for(let i = 0; i < particles.lenth; i ++)
+        {
+            if(this === particles[i]) {
+                particles.splice(i, 1);
+                break;
+            }
+        }
     }
 }
