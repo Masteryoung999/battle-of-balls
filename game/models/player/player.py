@@ -13,6 +13,7 @@ class Player(models.Model): # 每一个定义的class都需要继承自models这
 
     # 还可以添加其他信息, 例如性别年龄手机号等
     # 具体需要用到什么函数参数可能需要查
+    openid = models.CharField(default="", max_length=50, blank=True, null=True)
 
     def __str__(self):
         return str(self.user) # 显示用户的用户名

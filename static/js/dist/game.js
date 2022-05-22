@@ -712,7 +712,8 @@ class Player extends AcGameObject {
         this.$register_login = this.$register.find(".ac-game-settings-option");
 
         this.$register.hide();
-
+        
+        this.$acwing_login = this.$settings.find(".ac-game-settings-acwing img");
         this.root.$ac_game.append(this.$settings);  //  将登录界面加到窗口里去
 
         this.start();
@@ -724,8 +725,13 @@ class Player extends AcGameObject {
     }
 
     add_listening_events() {
+        let outer = this;
         this.add_listening_events_login();
         this.add_listening_events_register();
+
+        this.$acwing_login.click(function() {
+            outer.acwing_login();
+        });
     }
 
     add_listening_events_login() {
@@ -747,6 +753,19 @@ class Player extends AcGameObject {
         });
         this.$register_submit.click(function() {
             outer.register_on_remote();  //  点了注册按钮就会调用远程注册函数
+        });
+    }
+
+    acwing_login() {
+        $.ajax({
+            url: "https://app2394.acapp.acwing.com.cn/settings/acwing/web/apply_code/",
+            type: "GET",
+            success: function(resp) {
+                console.log(resp);
+                if(resp.result === "success") {
+                    window.location.replace(resp.apply_code_url)
+                }
+            }
         });
     }
 
