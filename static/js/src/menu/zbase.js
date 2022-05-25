@@ -42,10 +42,9 @@ this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
             outer.root.playground.show();
         });
         this.$multi_mode.click(function () {
-            console.log("click multi mode");
+            
         });
         this.$settings.click(function () {
-            console.log("click settings");
             outer.root.settings.logout_on_remote();
         });
     }

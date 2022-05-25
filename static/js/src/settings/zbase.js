@@ -42,7 +42,7 @@ class Settings {
         <br>
 
         <div class="ac-game-settings-acwing">
-            <img width="30" src="https://app2394.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
+            <img width="30" src="https://app2444.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
             <br>
             <div>
                 Acwing One Click Login
@@ -88,7 +88,7 @@ class Settings {
         <br>
 
         <div class="ac-game-settings-acwing">
-            <img width="30" src="https://app2394.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
+            <img width="30" src="https://app2444.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
             <br>
             <div>
                 Acwing One Click Login
@@ -125,8 +125,12 @@ class Settings {
     }
 
     start() {
-        this.getinfo();
-        this.add_listening_events();
+        if(this.platform === "ACAPP") {
+            this.getinfo_acapp();
+        } else {
+            this.getinfo_web();
+            this.add_listening_events();
+        }
     }
 
     add_listening_events() {
@@ -163,12 +167,11 @@ class Settings {
 
     acwing_login() {
         $.ajax({
-            url: "https://app2394.acapp.acwing.com.cn/settings/acwing/web/apply_code/",
+            url: "https://app2444.acapp.acwing.com.cn/settings/acwing/web/apply_code/",
             type: "GET",
             success: function(resp) {
-                console.log(resp);
                 if(resp.result === "success") {
-                    window.location.replace(resp.apply_code_url)
+                    window.location.replace(resp.apply_code_url)  //  当前页面重定向
                 }
             }
         });
@@ -182,14 +185,13 @@ class Settings {
         this.$login_error_message.empty();  //  把上次的error_masssage清空
 
         $.ajax({  //  登录函数
-            url: "https://app2394.acapp.acwing.com.cn/settings/login/",
+            url: "https://app2444.acapp.acwing.com.cn/settings/login/",
             type: "GET",
             data: {
                 username: username,
                 password: password,
             },
             success: function(resp) {
-                console.log(resp);
                 if(resp.result === "success") {
                     location.reload();  //  刷新, 一旦登录成功就会在cookie里记录信息,下次直接进入菜单页面不用再输密码
                 } else {
@@ -207,7 +209,7 @@ class Settings {
         this.$register_error_message.empty();
 
         $.ajax({
-            url: "https://app2394.acapp.acwing.com.cn/settings/register/",
+            url: "https://app2444.acapp.acwing.com.cn/settings/register/",
             type: "GET",
             data: {
                 username: username,
@@ -215,7 +217,6 @@ class Settings {
                 password_confirm: password_confirm, //  传给后端验证
             },
             success: function(resp) {
-                console.log(resp);
                 if(resp.result === "success") {
                     location.reload();  //  刷新页面
                 }
@@ -228,13 +229,11 @@ class Settings {
     }
 
     logout_on_remote() {  //  在远程服务器上登出
-        if (this.platform === "ACAPP") return false;
 
         $.ajax({
-            url: "https://app2394.acapp.acwing.com.cn/settings/logout/",
+            url: "https://app2444.acapp.acwing.com.cn/settings/logout/",
             type: "GET",
             success: function(resp) {
-                console.log(resp);
                 if(resp.result === "success") {
                     location.reload();
                 }
@@ -252,16 +251,41 @@ class Settings {
         this.$login.show();
     }
 
-    getinfo() {
+    acapp_login(appid, redirect_uri, scope, state) {
+        let outer = this;
+        this.root.AcWingOS.api.oauth2.authorize(appid, redirect_uri, scope, state, function(resp) {
+            if (resp.result === "success") {
+                outer.username = resp.username;
+                outer.photo = resp.photo;
+                outer.hide();
+                outer.root.menu.show();
+            }
+        });
+    }
+
+
+    getinfo_acapp() {
         let outer = this;
         $.ajax({
-            url: "https://app2394.acapp.acwing.com.cn/settings/getinfo/",
+            url: "https://app2444.acapp.acwing.com.cn/settings/acwing/acapp/apply_code/",
+            type: "GET",
+            success: function(resp) {
+                if(resp.result === "success") {
+                    outer.acapp_login(resp.appid, resp.redirect_uri, resp.scope, resp.state);
+                }
+            }
+        });
+    }
+
+    getinfo_web() {
+        let outer = this;
+        $.ajax({
+            url: "https://app2444.acapp.acwing.com.cn/settings/getinfo/",
             type: "GET",
             data: {
                 platform: outer.platform,
             },
             success: function (resp) {
-                console.log(resp);
                 if (resp.result === "success") {
                     outer.username = resp.username;
                     outer.photo = resp.photo;
