@@ -6,6 +6,16 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
 
         this.has_called_start = false;  // 判断是否执行过start函数
         this.timedelta = 0;  //当前帧距离上一帧的时间间隔, 单位ms
+        this.uuid = this.create_uuid();
+    }
+
+    create_uuid() {
+        let res = "";
+        for(let i = 0; i < 10; i ++) {
+            let x = parseInt(Math.floor(Math.random() * 10));  //  返回(0，1]之间的数
+            res += x;
+        }
+        return res;
     }
 
     start() { //对象刚出现的时候会初始化一些属性(颜色、大小、速度...), 但只会在第一帧执行一次
