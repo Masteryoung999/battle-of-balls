@@ -1,5 +1,5 @@
-class Fireball extends AcGameObject {
-    constructor(playground, player, x , y, radius, vx, vy, color, speed, move_length, damage) {
+class FireBall extends AcGameObject {
+    constructor(playground, player, x, y, radius, vx, vy, color, speed, move_length, damage) {
         super();
         this.playground = playground;
         this.player = player;
@@ -12,30 +12,31 @@ class Fireball extends AcGameObject {
         this.color = color;
         this.speed = speed;
         this.move_length = move_length;
-        this.damage = damage;  //  伤害值
-        this.eps = 0.1; 
+        this.damage = damage;
+        this.eps = 0.01;
     }
 
     start() {
-
     }
 
     update() {
-        if(this.move_length < this.eps) {
+        if (this.move_length < this.eps) {
             this.destroy();
             return false;
         }
+
         let moved = Math.min(this.move_length, this.speed * this.timedelta / 1000);
         this.x += this.vx * moved;
         this.y += this.vy * moved;
         this.move_length -= moved;
-        
-        for(let i = 0; i < this.playground.players.length; i ++) {
+
+        for (let i = 0; i < this.playground.players.length; i ++ ) {
             let player = this.playground.players[i];
-            if(this.player !== player && this.is_collision(player)) {
+            if (this.player !== player && this.is_collision(player)) {
                 this.attack(player);
             }
         }
+
         this.render();
     }
 
@@ -47,7 +48,7 @@ class Fireball extends AcGameObject {
 
     is_collision(player) {
         let distance = this.get_dist(this.x, this.y, player.x, player.y);
-        if(distance < this.radius + player.radius)
+        if (distance < this.radius + player.radius)
             return true;
         return false;
     }
@@ -57,9 +58,11 @@ class Fireball extends AcGameObject {
         player.is_attacked(angle, this.damage);
         this.destroy();
     }
+
     render() {
+        let scale = this.playground.scale;
         this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        this.ctx.arc(this.x * scale, this.y * scale, this.radius * scale, 0, Math.PI * 2, false);
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
     }
