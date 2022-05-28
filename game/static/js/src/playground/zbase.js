@@ -52,7 +52,7 @@ class AcGamePlayground {
             }
         } else if (mode === "multi mode") {
             this.mps = new MultiplayerSocket(this);
-            this.mps.uuid = this.players[0].uuid;
+            this.mps.uuid = this.players[0].uuid;  
 
             this.mps.ws.onopen = function() {  //  连接创建成功会回调这个函数
                 outer.mps.send_create_player(outer.root.settings.username, outer.root.settings.photo);

@@ -69,7 +69,7 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
         this.uuid = this.create_uuid();
     }
 
-    create_uuid() {
+    create_uuid() {  //  随机的10位数
         let res = "";
         for(let i = 0; i < 10; i ++) {
             let x = parseInt(Math.floor(Math.random() * 10));  //  返回(0，1]之间的数
@@ -85,6 +85,7 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
     }  //  虽然函数体是空的但未来继承它的类会重载这个函数
 
     on_destroy() { //在被销毁前执行一次, 在被删除前可能需要给对手加点属性(舔包之类的)
+        //this.uuid = ""
     }
 
     destroy() { //删掉该物体, 将它从全局数组里面移除
@@ -222,7 +223,7 @@ class Player extends AcGameObject {
 
         this.cur_skill = null;
 
-        if (this.character !== "robot") {
+        if (this.character !== "robot") {  //  只有robot才不渲染图片
             this.img = new Image();
             this.img.src = this.photo;
         }
@@ -445,10 +446,10 @@ class FireBall extends AcGameObject {
 }
 class MultiplayerSocket {
     constructor(playground) {
-        this.playground = playground;
+        this.playground = playground;  //  需要与其它元素产生关联
 
         this.ws = new WebSocket("wss://app2444.acapp.acwing.com.cn/wss/multiplayer/");  //  创建wss链接
-
+        //  记住这个语法, 地址必须与routing.py里的地址完全一致
         this.start();
     }
 
@@ -456,13 +457,12 @@ class MultiplayerSocket {
         this.receive();
     }
 
-    receive() {
+    receive() {  //  接收后端来的信息
         let outer = this;
-        this.ws.onmessage = function(e) {
-            let data = JSON.parse(e.data);
+        this.ws.onmessage = function(e) {  //  调用api
+            let data = JSON.parse(e.data);  //  将字典变成字符串
             let uuid = data.uuid;
             if (uuid === outer.uuid) return false;
-
             let event = data.event;
             if (event === "create_player") {
                 outer.receive_create_player(uuid, data.username, data.photo);
@@ -472,7 +472,7 @@ class MultiplayerSocket {
 
     send_create_player(username, photo)  {
         let outer = this;
-        this.ws.send(JSON.stringify({ //  将JSON变成字符串
+        this.ws.send(JSON.stringify({ //  向后端发送字符串，将JSON变成字符串
             'event': "create_player",
             'uuid': outer.uuid,
             'username': username,
@@ -549,7 +549,7 @@ class MultiplayerSocket {
             }
         } else if (mode === "multi mode") {
             this.mps = new MultiplayerSocket(this);
-            this.mps.uuid = this.players[0].uuid;
+            this.mps.uuid = this.players[0].uuid;  
 
             this.mps.ws.onopen = function() {  //  连接创建成功会回调这个函数
                 outer.mps.send_create_player(outer.root.settings.username, outer.root.settings.photo);

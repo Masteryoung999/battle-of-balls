@@ -1,9 +1,9 @@
 class MultiplayerSocket {
     constructor(playground) {
-        this.playground = playground;
+        this.playground = playground;  //  需要与其它元素产生关联
 
         this.ws = new WebSocket("wss://app2444.acapp.acwing.com.cn/wss/multiplayer/");  //  创建wss链接
-
+        //  记住这个语法, 地址必须与routing.py里的地址完全一致
         this.start();
     }
 
@@ -11,13 +11,12 @@ class MultiplayerSocket {
         this.receive();
     }
 
-    receive() {
+    receive() {  //  接收后端来的信息
         let outer = this;
-        this.ws.onmessage = function(e) {
-            let data = JSON.parse(e.data);
+        this.ws.onmessage = function(e) {  //  调用api
+            let data = JSON.parse(e.data);  //  将字典变成字符串
             let uuid = data.uuid;
             if (uuid === outer.uuid) return false;
-
             let event = data.event;
             if (event === "create_player") {
                 outer.receive_create_player(uuid, data.username, data.photo);
@@ -27,7 +26,7 @@ class MultiplayerSocket {
 
     send_create_player(username, photo)  {
         let outer = this;
-        this.ws.send(JSON.stringify({ //  将JSON变成字符串
+        this.ws.send(JSON.stringify({ //  向后端发送字符串，将JSON变成字符串
             'event': "create_player",
             'uuid': outer.uuid,
             'username': username,

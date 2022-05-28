@@ -26,7 +26,7 @@ class Player extends AcGameObject {
 
         this.cur_skill = null;
 
-        if (this.character !== "robot") {
+        if (this.character !== "robot") {  //  只有robot才不渲染图片
             this.img = new Image();
             this.img.src = this.photo;
         }

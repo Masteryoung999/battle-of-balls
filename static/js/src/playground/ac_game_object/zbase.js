@@ -9,7 +9,7 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
         this.uuid = this.create_uuid();
     }
 
-    create_uuid() {
+    create_uuid() {  //  随机的10位数
         let res = "";
         for(let i = 0; i < 10; i ++) {
             let x = parseInt(Math.floor(Math.random() * 10));  //  返回(0，1]之间的数
@@ -25,6 +25,7 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
     }  //  虽然函数体是空的但未来继承它的类会重载这个函数
 
     on_destroy() { //在被销毁前执行一次, 在被删除前可能需要给对手加点属性(舔包之类的)
+        //this.uuid = ""
     }
 
     destroy() { //删掉该物体, 将它从全局数组里面移除
