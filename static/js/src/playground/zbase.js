@@ -36,6 +36,8 @@ class AcGamePlayground {
         let outer = this;
         this.$playground.show();
 
+        this.mode = mode;
+
         this.resize();
 
         this.width = this.$playground.width();
