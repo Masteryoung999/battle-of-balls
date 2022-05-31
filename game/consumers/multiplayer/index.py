@@ -9,9 +9,9 @@ class MultiPlayer(AsyncWebsocketConsumer):
 
         for i in range(1000): # 最多一千个房间
             name = "room-%d" % (i)
-            if not cache.has_key(name) or len(cache.get(name)) < settings.ROOM_CAPACITY: # 没有这个房间或者房间人数不足三人
+            if not cache.has_key(name) or len(cache.get(name)) < settings.ROOM_CAPACITY: # 没有这个房间或者房间人数不足三人创建房间
                 self.room_name = name
-                break
+                break 
         if not self.room_name: # 房间不够了
             return
         
@@ -55,7 +55,7 @@ class MultiPlayer(AsyncWebsocketConsumer):
         )
     
     async def group_send_event(self, data): # 接收函数名与type关键字要一样
-        await self.send(text_data=json.dumps(data))
+        await self.send(text_data=json.dumps(data)) # django自带的群发功能发给前端
 
     async def move_to(self, data):
         await self.channel_layer.group_send(
@@ -110,6 +110,18 @@ class MultiPlayer(AsyncWebsocketConsumer):
             }
         )
 
+    async def message(self, data):
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': "group_send_event",
+                'event': "message",
+                'uuid': data['uuid'],
+                'username': data['username'],
+                'text': data['text'],
+            }
+        )
+
     async def receive(self, text_data): # 接收前端向后端发的请求
         data = json.loads(text_data)
         event = data['event'] 
@@ -123,3 +135,5 @@ class MultiPlayer(AsyncWebsocketConsumer):
             await self.attack(data)
         elif event == "blink":
             await self.blink(data)
+        elif event == "message":
+            await self.message(data)

@@ -8,3 +8,4 @@ find $JS_PATH_SRC -type f -name '*.js' | sort | xargs cat > ${JS_PATH_DIST}game.
 
 cd ..
 echo yes | python3 manage.py collectstatic
+

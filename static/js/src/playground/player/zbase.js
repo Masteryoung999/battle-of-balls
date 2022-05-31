@@ -42,7 +42,7 @@ class Player extends AcGameObject {
     }
 
     start() {
-        this.playground.player_count++;
+        this.playground.player_count ++;
         this.playground.notice_board.write("已就绪： " + this.playground.player_count + "人");
 
         if (this.playground.player_count >= 3) {
@@ -50,7 +50,7 @@ class Player extends AcGameObject {
             this.playground.notice_board.write("Fighting !");
         }
 
-        if (this.character === "me") {
+        if (this.character === "me") {  //  只有自己才会添加监听该函数
             this.add_listening_events();
         } else if (this.character === "robot") {
             let tx = Math.random() * this.playground.width / this.playground.scale;
@@ -65,8 +65,9 @@ class Player extends AcGameObject {
             return false;
         });
         this.playground.game_map.$canvas.mousedown(function (e) {
+
             if (outer.playground.state !== "fighting")
-                return false;
+                return true;
 
             const rect = outer.ctx.canvas.getBoundingClientRect();
             if (e.which === 3) {
@@ -104,7 +105,18 @@ class Player extends AcGameObject {
             }
         });
 
-        $(window).keydown(function (e) {
+        this.playground.game_map.$canvas.keydown(function (e) {
+            if(e.which === 13) {  //  enter
+                if(outer.playground.mode === "multi mode") {  //  打开聊天框
+                    outer.playground.chat_field.show_input();
+                    return false;
+                }
+            } else if (e.which === 27) {  // esc
+                if(outer.playground.mode === "multi mode") {  //  关闭聊天框
+                    outer.playground.chat_field.hide_input();
+                }
+            }
+
             if (outer.playground.state !== "fighting")
                 return true;
 
@@ -292,6 +304,11 @@ class Player extends AcGameObject {
             this.ctx.lineTo(x * scale, y * scale);
             this.ctx.fillStyle = "rgba(0, 0, 50, 0.6)";
             this.ctx.fill();
+            //  显示冷却时间
+            this.ctx.font = "17px serif";
+            this.ctx.fillStyle = "white";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText(this.fireball_coldtime.toFixed(1), x * scale,  (y + 0.015)* scale);
         }
 
         x = 1.62, y = 0.9, r = 0.04;
@@ -310,6 +327,11 @@ class Player extends AcGameObject {
             this.ctx.lineTo(x * scale, y * scale);
             this.ctx.fillStyle = "rgba(0, 0, 50, 0.6)";
             this.ctx.fill();
+
+            this.ctx.font = "17px serif";
+            this.ctx.fillStyle = "white";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText(this.blink_coldtime.toFixed(1), x * scale,  (y + 0.015)* scale);
         }
     }
 
