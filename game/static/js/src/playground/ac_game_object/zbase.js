@@ -24,6 +24,10 @@ class AcGameObject {  //简易的游戏引擎, 所有会动的类以它为父类
     update() { //有些操作(比如渲染render()...)需要每一帧都执行
     }  //  虽然函数体是空的但未来继承它的类会重载这个函数
 
+    late_update() {  //  在每一帧的最后执行一次
+
+    }
+
     on_destroy() { //在被销毁前执行一次, 在被删除前可能需要给对手加点属性(舔包之类的)
         //this.uuid = ""
     }
@@ -54,6 +58,12 @@ let AC_GAME_ANIMATION = function(timestamp) {  //  时间戳timestamp:系统自�
             obj.update();
         }
     }
+
+    for(let i = 0; i < AC_GAME_OBJECTS.length; i ++) {
+        let obj = AC_GAME_OBJECTS[i];
+        obj.late_update();
+    }
+
     last_timestamp = timestamp;  //  last_timestamp不用初始化是因为第一帧会给它赋值(第一帧不会执行else中的语句)
 
     requestAnimationFrame(AC_GAME_ANIMATION);  //  递归调用

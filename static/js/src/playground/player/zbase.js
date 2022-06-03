@@ -43,7 +43,7 @@ class Player extends AcGameObject {
 
     start() {
         this.playground.player_count ++;
-        this.playground.notice_board.write("已就绪： " + this.playground.player_count + "人");
+        this.playground.notice_board.write("正在为您匹配中...");
 
         if (this.playground.player_count >= 3) {
             this.playground.state = "fighting";
@@ -216,11 +216,21 @@ class Player extends AcGameObject {
 
     update() {
         this.spent_time += this.timedelta / 1000;
+
+        this.update_win();
+
         if (this.character === "me" && this.playground.state === "fighting") {
             this.update_coldtime();
         }
         this.update_move();
         this.render();
+    }
+
+    update_win() {
+        if(this.playground.state === "fighting" && this.character === "me" && this.playground.players.length === 1) {
+            this.playground.state === "over";
+            this.playground.score_board.win();
+        }
     }
 
     update_coldtime() {
@@ -337,7 +347,10 @@ class Player extends AcGameObject {
 
     on_destroy() {
         if(this.character === "me") {
-            this.playground.state = "over";
+            if(this.playground.state === "fighting") {
+                this.playground.score_board.lose();
+                this.playground.state = "over";
+            }
         }
         for (let i = 0; i < this.playground.players.length; i++) {
             if (this.playground.players[i] === this) {
