@@ -48,6 +48,7 @@ class Player extends AcGameObject {
         if (this.playground.player_count >= 3) {
             this.playground.state = "fighting";
             this.playground.notice_board.write("Fighting !");
+
         }
 
         if (this.character === "me") {  //  只有自己才会添加监听该函数

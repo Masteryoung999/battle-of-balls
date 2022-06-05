@@ -84,7 +84,7 @@ class AcGamePlayground {
         }
     }
 
-    hide() {  // 关闭playgrovund界面
+    hide() {  // 关闭playground界面
         while(this.players && this.players.length > 0) {
             this.players[0].destroy();
         }
