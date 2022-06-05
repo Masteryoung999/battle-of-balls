@@ -126,21 +126,21 @@
     user-select: none;
 }
 .ac-game-menu-field {
-    left: 70%;/*离左边的距离百分比*/
+    left: 60%;/*离左边的距离百分比*/
     width: 20vw; /*整个页面高度(百分比参数:7%高)*/
     position: relative;/*相对的*/
-    top: 65%;/*左上角离上方的距离百分比*/
+    top: 60%;/*左上角离上方的距离百分比*/
 }
 .ac-game-menu-field-item {
     color: gold; /*按钮字体颜色*/
-    height: 6vh; /*按钮之间相对间隔的高度*/
-    width: 18vw; /*按钮的宽度*/
+    height: 5vh; /*按钮之间相对间隔的高度*/
+    width: 12vw; /*按钮的宽度*/
     font-size: 3vh;/*字体大小*/
     font-style: italic; /*字体：意大利斜体*/
     text-align: center;/*字体在按钮居中*/
-    background-color: rgba(39,21,28, 0.6);
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px;/*阴影半径10像素, 是边界更圆滑*/
-    letter-spacing: 0.5vw;/*两个字之间的宽度, 0.5%的宽度*/
+    letter-spacing: 0.8vw;/*两个字之间的宽度, 0.5%的宽度*/
     cursor: pointer;/*光标会变成一个小手的形状*/
 }
 
@@ -197,4 +197,49 @@
     font-size: 2vh;
 
     background-color: rgba(222,225,230, 0.2);
+}
+
+.ac-game-illustrate {
+    width: 100%;
+    height: 100%;
+    background-image: url("/static/image/menu/BACKGROUND.gif");
+    background-size: 100% 100%;
+    user-select: none;
+}
+
+.ac-game-illustrate-field {
+    left: 10%;/*离左边的距离百分比*/
+    width: 80vw; /*整个页面高度(百分比参数:7%高)*/                                                                                                              
+    position: relative;/*相对的*/
+    top: 10%;/*左上角离上方的距离百分比*/
+}
+
+.ac-game-illustrate-title {
+    color: red;  /* 白色字体 */
+    font-size: 28px;  /* 字体大小 */
+    text-align: center;  /* 居中 */
+}
+
+.ac-game-illustrate-multimode-title {
+    color: red;  /* 白色字体 */
+    font-size: 24px;  /* 字体大小 */
+    text-align: center;  /* 居中 */
+}
+
+.ac-game-illustrate-field-item {
+    color: gold; /*按钮字体颜色*/
+    height: 5vh; /*按钮之间相对间隔的高度*/
+    width: 6vw; /*按钮的宽度*/
+    font-size: 4vh;/*字体大小*/
+    font-style: italic; /*字体：意大利斜体*/
+    text-align: center;/*字体在按钮居中*/
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;/*阴影半径10像素, 是边界更圆滑*/
+    letter-spacing: 0.5vw;/*两个字之间的宽度, 0.5%的宽度*/
+    cursor: pointer;/*光标会变成一个小手的形状*/
+}
+
+.ac-game-illustrate-field-item:hover{/*当鼠标悬浮在上面的时候样式怎么变*/
+    transform: scale(1.2);/*鼠标悬浮在上面会变成1.2倍的大小*/
+    transition: 150ms;/*在150ms的时间内变化, 比较平缓*/
 }

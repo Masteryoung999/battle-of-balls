@@ -12,21 +12,22 @@ class AcGameMenu {
             联机对战
         </div>
         <br>
-        <div class="ac-game-menu-field-item ac-game-menu-field-item-settings">
-            退出
+        <div class="ac-game-menu-field-item ac-game-menu-field-item-readme">
+            游戏说明
         </div>
         <br>
-        <div class="ac-game-menu-field-item ac-game-menu-field-item-readme">
-            持续更新中...
+        <div class="ac-game-menu-field-item ac-game-menu-field-item-settings">
+            退出
         </div>
     </div>
 </div>
 `);
-this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
+        this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
         this.root.$ac_game.append(this.$menu);
         this.$single_mode = this.$menu.find('.ac-game-menu-field-item-single-mode');
         this.$multi_mode = this.$menu.find('.ac-game-menu-field-item-multi-mode');
         this.$settings = this.$menu.find('.ac-game-menu-field-item-settings');
+        this.$readme = this.$menu.find('.ac-game-menu-field-item-readme');
 
         this.start();
     }
@@ -48,6 +49,10 @@ this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
         this.$settings.click(function () {
             outer.root.settings.logout_on_remote();
         });
+        this.$readme.click(function () {
+            outer.hide();
+            outer.root.readme.show();
+        })
     }
 
     show() {  // 显示menu界面
@@ -132,7 +137,27 @@ let AC_GAME_ANIMATION = function(timestamp) {  //  时间戳timestamp:系统自�
 //  js提供的api, 这个函数在一秒钟内会被调用60次
 //  最开始:第一次从这里执行调用AC_GAME_ANIMATION后的function函数, 我也不是很懂反正知道它1s能执行60次就行
 //  至此简易版游戏引擎就实现了
-requestAnimationFrame(AC_GAME_ANIMATION);class ChatField {
+requestAnimationFrame(AC_GAME_ANIMATION);class Background extends AcGameObject {
+    constructor(playground) {
+        super();
+        this.playground = playground;
+        this.ctx = this.playground.game_map.ctx;
+
+        this.img = new Image();
+        this.img.src = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ecbb5b98a43ba80121a0f751aec3.jpg%403000w_1l_0o_100sh.jpg&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656991871&t=aa6be21fde13ef28bc71e96406402086";
+    }
+    start() {
+
+    }
+
+    update() {
+        this.render();
+    }
+
+    render() {
+        this.ctx.drawImage(this.img, 0, 0, this.playground.width, this.playground.height);
+    }
+}class ChatField {
     constructor(playground) {
         this.playground = playground;
 
@@ -1044,6 +1069,7 @@ class MultiplayerSocket {
         this.width = this.$playground.width();
         this.height = this.$playground.height();
         this.game_map = new GameMap(this);
+        this.background = new Background(this);
 
         this.mode = mode;
         this.state = "waiting";  //  waiting -> fighting -> over
@@ -1057,7 +1083,7 @@ class MultiplayerSocket {
         this.players.push(new Player(this, this.width / 2 / this.scale, 0.5, 0.05, "white", 0.15, "me", this.root.settings.username, this.root.settings.photo));
 
         if (mode === "single mode") { //  如果是单人模式, 加AI
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 8; i++) {
                 this.players.push(new Player(this, this.width / 2 / this.scale, 0.5, 0.05, this.get_random_color(), 0.15, "robot"));
             }
         } else if (mode === "multi mode") {
@@ -1096,7 +1122,60 @@ class MultiplayerSocket {
         this.$playground.hide();
     }
 }
- class Settings {
+ class Readme {
+    constructor(root) {
+        this.root = root;
+        this.$illustrate = $(`
+<div class="ac-game-illustrate">
+    <div class="ac-game-illustrate-field">
+        <div class="ac-game-illustrate-field-item">
+            返回
+        </div>
+        <br>
+        <div class="ac-game-illustrate-title">
+            游戏说明
+        </div>
+        <p>基本操作：点击鼠标右键进行移动, 左键释放技能, 按ENTER键可以在线聊天(仅限多人模式), 按ESC键退出聊天
+        </p>
+        <p>技能: 按下 q + 鼠标左键发射火球, 按下 f + 鼠标左键闪现
+        </p>
+        <div class="ac-game-illustrate-multimode-title">
+            对于多人模式
+        </div>
+        <p>系统会根据每个人的战力进行匹配, 以优化游戏体验
+        </p>
+        <p>每个人初始会有1500的战力, 每输一局扣5分, 赢一局加10分
+        </p>
+    </div>
+</div>
+`);
+        this.$illustrate.hide();
+        this.root.$ac_game.append(this.$illustrate);
+        this.$item = this.$illustrate.find('.ac-game-illustrate-field-item')
+
+        this.start();
+    }
+
+    start() {
+        this.add_listening_events();
+    }
+
+    add_listening_events() {
+        let outer = this;
+        this.$item.click(function () {
+            outer.hide();
+            outer.root.menu.show();
+        });
+    }
+
+    show() {
+        this.$illustrate.show();
+    }
+
+    hide() {
+        this.$illustrate.hide();
+    }
+}class Settings {
     constructor(root) {
         this.root = root;
         this.platform = "WEB";  //  默认是WEB来的
@@ -1416,6 +1495,7 @@ class MultiplayerSocket {
         this.settings = new Settings(this);
         this.menu = new AcGameMenu(this);
         this.playground = new AcGamePlayground(this);
+        this.readme = new Readme(this);
 
         this.start();
     }

@@ -12,21 +12,22 @@ class AcGameMenu {
             联机对战
         </div>
         <br>
-        <div class="ac-game-menu-field-item ac-game-menu-field-item-settings">
-            退出
+        <div class="ac-game-menu-field-item ac-game-menu-field-item-readme">
+            游戏说明
         </div>
         <br>
-        <div class="ac-game-menu-field-item ac-game-menu-field-item-readme">
-            持续更新中...
+        <div class="ac-game-menu-field-item ac-game-menu-field-item-settings">
+            退出
         </div>
     </div>
 </div>
 `);
-this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
+        this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
         this.root.$ac_game.append(this.$menu);
         this.$single_mode = this.$menu.find('.ac-game-menu-field-item-single-mode');
         this.$multi_mode = this.$menu.find('.ac-game-menu-field-item-multi-mode');
         this.$settings = this.$menu.find('.ac-game-menu-field-item-settings');
+        this.$readme = this.$menu.find('.ac-game-menu-field-item-readme');
 
         this.start();
     }
@@ -48,6 +49,10 @@ this.$menu.hide(); //  默认先关闭菜单界面,登录后才显示
         this.$settings.click(function () {
             outer.root.settings.logout_on_remote();
         });
+        this.$readme.click(function () {
+            outer.hide();
+            outer.root.readme.show();
+        })
     }
 
     show() {  // 显示menu界面
